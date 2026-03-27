@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PZN Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --neon-blue: #00D4FF;
+            --neon-purple: #7A5CFF;
+            --deep-space: #050A1A;
+            --cyber-pink: #FF00AA;
+            --matrix-green: #00FF88;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--deep-space);
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* Custom Cursor */
+        .cursor {
+            width: 14px;
+            height: 14px;
+            border: none;
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            background: radial-gradient(circle at 35% 35%, rgba(0, 212, 255, 1), rgba(0, 212, 255, 0.7));
+            box-shadow: 0 0 15px var(--neon-blue), 0 0 30px rgba(0, 212, 255, 0.9), inset -1px -1px 3px rgba(0, 0, 0, 0.6);
+            transition: all 0.05s ease;
+        }
+        
+        /* Cursor Trail Particles */
+        .cursor-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9997;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 212, 255, 0.9), rgba(0, 212, 255, 0.3));
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+        }
+        
+        .cursor-follower {
+            width: 0;
+            height: 0;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.8s ease-out;
+        }
+        
+        /* Neon Glow Effects */
+        .neon-text {
+            text-shadow: 0 0 10px var(--neon-blue), 
+                         0 0 20px var(--neon-blue), 
+                         0 0 30px rgba(0, 212, 255, 0.5);
+        }
+        
+        .neon-box {
+            box-shadow: 0 0 15px var(--neon-blue), 
+                        0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        .neon-purple-text {
+            text-shadow: 0 0 10px var(--neon-purple), 
+                         0 0 20px var(--neon-purple), 
+                         0 0 30px rgba(122, 92, 255, 0.5);
+        }
+        
+        /* Glass Morphism */
+        .glass {
+            background: rgba(5, 10, 26, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        
+        /* Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+        
+        .logo-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 3rem;
+        }
+        
+        .logo-circle-main {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .logo-circle-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 40px var(--neon-blue), inset 0 0 40px rgba(0, 212, 255, 0.2);
+            animation: rotate 20s linear infinite;
+        }
+        
+        .logo-circle-main::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 240px;
+            height: 240px;
+            border: 1px solid var(--neon-purple);
+            border-radius: 50%;
+            box-shadow: 0 0 30px var(--neon-purple);
+            animation: rotate 15s linear infinite reverse;
+        }
+        
+        .logo-pz-main {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6.5rem;
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--neon-blue);
+            text-shadow: 0 0 30px var(--neon-blue), 0 0 60px rgba(122, 92, 255, 0.6);
+            letter-spacing: 2px;
+            z-index: 10;
+            animation: pulse 2s infinite alternate;
+        }
+        
+        /* Project Cards */
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(122, 92, 255, 0.1) 100%);
+            z-index: 1;
+        }
+        
+        .project-card:hover::before {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.3) 0%, rgba(122, 92, 255, 0.3) 100%);
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { 
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+            100% { 
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+                text-shadow: 0 0 50px var(--neon-blue), 0 0 80px rgba(122, 92, 255, 0.8);
+            }
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% {
+                filter: drop-shadow(0 20px 60px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.3)) brightness(1.3) contrast(1.4);
+            }
+            50% {
+                filter: drop-shadow(0 20px 80px rgba(0, 212, 255, 0.8)) drop-shadow(0 0 60px rgba(0, 212, 255, 0.6)) brightness(1.5) contrast(1.6);
+            }
+        }
+        
+        /* Particles */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(5, 10, 26, 0.7);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        
+        nav a {
+            position: relative;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--neon-blue);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        /* Service Badges Circle */
+        .service-badge {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5), inset 0 0 20px rgba(0, 212, 255, 0.1);
+            letter-spacing: 1px;
+        }
+        
+        .service-badge::before {
+            content: '';
+            position: absolute;
+            width: 110%;
+            height: 110%;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            top: -5%;
+            left: -5%;
+            animation: pulse-ring 2s infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(0, 212, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 15px rgba(0, 212, 255, 0);
+            }
+        }
+        
+        .service-badge:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.8), inset 0 0 30px rgba(0, 212, 255, 0.2);
+            border-color: rgba(0, 212, 255, 1);
+        }
+        
+        .service-badge.purple {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 20px rgba(122, 92, 255, 0.5), inset 0 0 20px rgba(122, 92, 255, 0.1);
+            color: var(--neon-purple);
+        }
+        
+        .service-badge.purple::before {
+            border-color: rgba(122, 92, 255, 0.3);
+            box-shadow: 0 0 0 0 rgba(122, 92, 255, 0.7);
+            animation: pulse-ring-purple 2s infinite;
+        }
+        
+        @keyframes pulse-ring-purple {
+            0% {
+                box-shadow: 0 0 0 0 rgba(122, 92, 255, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(122, 92, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 15px rgba(122, 92, 255, 0);
+            }
+        }
+        
+        .service-badge.purple:hover {
+            box-shadow: 0 0 40px rgba(122, 92, 255, 0.8), inset 0 0 30px rgba(122, 92, 255, 0.2);
+            border-color: rgba(122, 92, 255, 1);
+        }
+        
+        .service-badge-text {
+            position: relative;
+            z-index: 2;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo-container {
+                width: 180px;
+                height: 180px;
+                margin-bottom: 2rem;
+            }
+            
+            .logo-pz-main {
+                font-size: 4rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <!-- Grid Background -->
+    <div class="grid-bg"></div>
+    
+    <!-- Particles -->
+    <div id="particles-js"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 py-3 px-8">
+        <div class="flex justify-between items-center max-w-7xl mx-auto">
+            <div class="text-xs font-bold neon-text tracking-widest">
+                PZN DESIGN<br><span class="hidden">FUTURO</span>
+            </div>
+            <ul class="hidden md:flex space-x-4 text-white">
+                <li><a href="#inicio" class="hover:text-neon-blue transition font-semibold text-xs">INÍCIO</a></li>
+                <li><a href="#servicos" class="hover:text-neon-blue transition font-semibold text-xs">SERVIÇOS</a></li>
+                <li><a href="#pacotes" class="hover:text-neon-blue transition font-semibold text-xs">PREÇOS</a></li>
+                <li><a href="#web" class="hover:text-neon-blue transition font-semibold text-xs">WEBSITES</a></li>
+                <li><a href="#uxui" class="hover:text-neon-blue transition font-semibold text-xs">REDES SOCIAIS</a></li>
+                <li><a href="#projetos" class="hover:text-neon-blue transition font-semibold text-xs">CASES</a></li>
+                <li><a href="#sobre" class="hover:text-neon-blue transition font-semibold text-xs">SOBRE</a></li>
+                <li><a href="#contato" class="hover:text-neon-blue transition font-semibold text-xs">CONTATO</a></li>
+            </ul>
+            <button class="border border-neon-blue text-neon-blue px-4 py-2 font-bold text-xs hover:bg-neon-blue hover:text-black transition tracking-widest">
+                SOLICITAR ORÇAMENTO
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero relative" id="inicio">
+        <!-- Center Content -->
+        <div class="hero-content z-20 max-w-2xl px-4">
+            <!-- Logo Image -->
+            <div class="mb-12 flex justify-center">
+                <img src="imagens/Design sem nome (1).png" alt="PZN Design" class="logo-image" style="height: 380px; object-fit: contain; mix-blend-mode: lighten; animation: fadeInScale 0.8s ease-out, float 3s ease-in-out infinite, glowPulse 3s ease-in-out infinite;">
+            </div>
+            
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 neon-text tracking-wider leading-tight">
+                TRANSFORME SEU NEGÓCIO DIGITAL
+            </h1>
+            
+            <p class="text-xs sm:text-sm md:text-base mb-3 opacity-80 uppercase tracking-widest">
+                SITES, REDES SOCIAIS, MARCAS E MUITO MAIS.
+            </p>
+            <p class="text-sm sm:text-base md:text-lg mb-10 tracking-wide">
+                SOLUÇÕES DIGITAIS COMPLETAS PARA IMPULSIONAR SEU CRESCIMENTO.
+            </p>
+            
+            <button class="px-8 py-3 bg-gradient-to-r from-neon-blue to-cyan-400 text-black font-bold uppercase tracking-widest hover:opacity-90 transition duration-300 text-xs sm:text-sm">
+                Solicitar Orçamento
+            </button>
+        </div>
+
+        <!-- Right Service Badges -->
+        <div class="absolute right-20 top-1/2 transform -translate-y-1/2 hidden lg:flex flex-col items-center gap-12 pointer-events-auto">
+            <div class="service-badge text-neon-blue">
+                <div class="service-badge-text">UX/UI</div>
+            </div>
+            
+            <div class="service-badge text-neon-blue">
+                <div class="service-badge-text">WEBSITE</div>
+            </div>
+            
+            <div class="service-badge purple text-neon-purple">
+                <div class="service-badge-text">MARCA</div>
+            </div>
+            
+            <div class="service-badge text-neon-blue">
+                <div class="service-badge-text">SOCIAL MEDIA</div>
+            </div>
+            
+            <div class="service-badge text-neon-blue">
+                <div class="service-badge-text">DESIGN</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="py-20 px-4" id="servicos">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 neon-purple-text">NOSSOS SERVIÇOS</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass p-8 rounded-lg border border-neon-blue/30 hover:border-neon-blue transition group hover:shadow-xl hover:shadow-neon-blue/20">
+                    <div class="text-neon-blue text-5xl mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">DESENVOLVIMENTO WEB</h3>
+                    <p class="text-gray-300 mb-6">Sites profissionais, e-commerce e aplicações web otimizadas para conversão e SEO.</p>
+                    <ul class="text-sm text-gray-400 space-y-2">
+                        <li>✓ Sites Responsivos</li>
+                        <li>✓ E-commerce Completo</li>
+                        <li>✓ Otimização SEO</li>
+                        <li>✓ Performance Máxima</li>
+                    </ul>
+                </div>
+                
+                <div class="glass p-8 rounded-lg border border-neon-blue/30 hover:border-neon-blue transition group hover:shadow-xl hover:shadow-neon-blue/20">
+                    <div class="text-neon-blue text-5xl mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">IDENTIDADE VISUAL</h3>
+                    <p class="text-gray-300 mb-6">Logos, guias de marca e identidades visuais que refletem sua essência.</p>
+                    <ul class="text-sm text-gray-400 space-y-2">
+                        <li>✓ Design de Logo</li>
+                        <li>✓ Guia de Marca</li>
+                        <li>✓ Paleta de Cores</li>
+                        <li>✓ Tipografia</li>
+                    </ul>
+                </div>
+                
+                <div class="glass p-8 rounded-lg border border-neon-blue/30 hover:border-neon-blue transition group hover:shadow-xl hover:shadow-neon-blue/20">
+                    <div class="text-neon-blue text-5xl mb-4 group-hover:scale-110 transition">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">REDES SOCIAIS</h3>
+                    <p class="text-gray-300 mb-6">Gestão e criação de conteúdo para fortalecer sua presença digital.</p>
+                    <ul class="text-sm text-gray-400 space-y-2">
+                        <li>✓ Gestão de Contas</li>
+                        <li>✓ Conteúdo Criativo</li>
+                        <li>✓ Estratégia Digital</li>
+                        <li>✓ Publicidade Paga</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Packages Section -->
+    <section class="py-20 px-4 bg-gradient-to-b from-transparent via-neon-blue/5 to-transparent" id="pacotes">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 neon-text">PACOTES E PREÇOS</h2>
+            <p class="text-center text-gray-300 mb-16">Escolha o plano perfeito para seu negócio</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Starter Package -->
+                <div class="glass p-8 rounded-lg border border-neon-blue/30 hover:border-neon-blue transition hover:shadow-xl hover:shadow-neon-blue/20 transform hover:scale-105">
+                    <h3 class="text-2xl font-bold mb-2 neon-blue">STARTER</h3>
+                    <p class="text-gray-400 text-sm mb-6">Perfeito para iniciar</p>
+                    
+                    <div class="mb-8">
+                        <span class="text-5xl font-bold neon-text">R$</span>
+                        <span class="text-4xl font-bold">700</span>
+                        <p class="text-gray-400 text-sm mt-2">/mês</p>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="text-gray-300">✓ Website (até 5 páginas)</li>
+                        <li class="text-gray-300">✓ Design Responsivo</li>
+                        <li class="text-gray-300">✓ SEO Básico</li>
+                        <li class="text-gray-300">✓ Manutenção 1x/mês</li>
+                        <li class="text-gray-400">✗ Redes Sociais</li>
+                        <li class="text-gray-400">✗ Logo Design</li>
+                    </ul>
+                    
+                    <button class="w-full px-6 py-3 border-2 border-neon-blue text-neon-blue font-bold hover:bg-neon-blue hover:text-black transition text-sm">
+                        Escolher Plano
+                    </button>
+                </div>
+                
+                <!-- Professional Package -->
+                <div class="glass p-8 rounded-lg border-2 border-neon-purple hover:border-neon-purple transition hover:shadow-2xl hover:shadow-neon-purple/30 transform hover:scale-105 relative">
+                    <div class="absolute -top-4 right-6 bg-neon-purple text-black px-4 py-1 rounded-full text-xs font-bold">MAIS POPULAR</div>
+                    
+                    <h3 class="text-2xl font-bold mb-2 neon-purple-text">PROFISSIONAL</h3>
+                    <p class="text-gray-400 text-sm mb-6">Melhor custo-benefício</p>
+                    
+                    <div class="mb-8">
+                        <span class="text-5xl font-bold neon-purple-text">R$</span>
+                        <span class="text-4xl font-bold">900</span>
+                        <p class="text-gray-400 text-sm mt-2">/mês</p>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="text-gray-300">✓ Website Completo</li>
+                        <li class="text-gray-300">✓ Design Profissional</li>
+                        <li class="text-gray-300">✓ Logo + Identidade Visual</li>
+                        <li class="text-gray-300">✓ Gestão de Redes (2 plataformas)</li>
+                        <li class="text-gray-300">✓ SEO Otimizado</li>
+                        <li class="text-gray-300">✓ 4 Posts/mês por rede</li>
+                        <li class="text-gray-300">✓ Manutenção ilimitada</li>
+                    </ul>
+                    
+                    <button class="w-full px-6 py-3 border-2 border-neon-blue text-neon-blue font-bold hover:bg-neon-blue hover:text-black transition text-sm">
+                        Escolher Plano
+                    </button>
+                </div>
+                
+                <!-- Enterprise Package -->
+                <div class="glass p-8 rounded-lg border border-neon-blue/30 hover:border-neon-blue transition hover:shadow-xl hover:shadow-neon-blue/20 transform hover:scale-105">
+                    <h3 class="text-2xl font-bold mb-2 neon-blue">ENTERPRISE</h3>
+                    <p class="text-gray-400 text-sm mb-6">Para grandes demandas</p>
+                    
+                    <div class="mb-8">
+                        <span class="text-5xl font-bold neon-text">R$</span>
+                        <span class="text-4xl font-bold">1.500</span>
+                        <p class="text-gray-400 text-sm mt-2">/mês</p>
+                    </div>
+                    
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="text-gray-300">✓ Tudo do Profissional</li>
+                        <li class="text-gray-300">✓ E-commerce Completo</li>
+                        <li class="text-gray-300">✓ 5+ Redes Sociais</li>
+                        <li class="text-gray-300">✓ 12 Posts/mês por rede</li>
+                        <li class="text-gray-300">✓ Publicidade Paga</li>
+                        <li class="text-gray-300">✓ Consultoria Estratégica</li>
+                        <li class="text-gray-300">✓ Suporte 24/7</li>
+                    </ul>
+                    
+                    <button class="w-full px-6 py-3 border-2 border-neon-blue text-neon-blue font-bold hover:bg-neon-blue hover:text-black transition text-sm">
+                        Solicitar Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Web Section -->
+    <section class="py-20 px-4" id="web">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 neon-text">CRIAR WEBSITES</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="flex flex-col justify-center">
+                    <h3 class="text-3xl font-bold mb-6 neon-text">Sua Presença Online</h3>
+                    <p class="text-gray-300 mb-4">Um website profissional é a base de qualquer negócio digital moderno. Criamos sites que não apenas parecem incríveis, mas que trazem resultados reais.</p>
+                    <p class="text-gray-300 mb-4">Desde blogs até e-commerce complexos, nossos websites são otimizados para conversão, velocidade e SEO.</p>
+                    <p class="text-gray-300 mb-8"><strong>Inclusos em todos os pacotes:</strong> Hospedagem, Domínio, SSL, Backup automático, Painel admin intuitivo</p>
+                    <button class="w-fit px-8 py-3 bg-gradient-to-r from-neon-blue to-cyan-400 text-black font-bold hover:opacity-90 transition text-sm">
+                        Solicitar Orçamento
+                    </button>
+                </div>
+                
+                <div class="glass p-8 rounded-lg border border-neon-blue/30">
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="text-neon-blue mr-4 mt-1 text-xl"><i class="fas fa-mobile-alt"></i></div>
+                            <div>
+                                <h4 class="font-bold mb-1">100% Responsivo</h4>
+                                <p class="text-gray-400 text-sm">Funciona perfeitamente em celulares, tablets e desktops</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="text-neon-blue mr-4 mt-1 text-xl"><i class="fas fa-tachometer-alt"></i></div>
+                            <div>
+                                <h4 class="font-bold mb-1">Velocidade Máxima</h4>
+                                <p class="text-gray-400 text-sm">Carregamento rápido aumenta conversões em até 40%</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="text-neon-blue mr-4 mt-1 text-xl"><i class="fas fa-search"></i></div>
+                            <div>
+                                <h4 class="font-bold mb-1">SEO Otimizado</h4>
+                                <p class="text-gray-400 text-sm">Apareça nos buscadores e atraia clientes qualificados</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="text-neon-blue mr-4 mt-1 text-xl"><i class="fas fa-lock"></i></div>
+                            <div>
+                                <h4 class="font-bold mb-1">Segurança Máxima</h4>
+                                <p class="text-gray-400 text-sm">Proteção contra ataques e backup automático diário</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="text-neon-blue mr-4 mt-1 text-xl"><i class="fas fa-chart-line"></i></div>
+                            <div>
+                                <h4 class="font-bold mb-1">Analytics Integrado</h4>
+                                <p class="text-gray-400 text-sm">Acompanhe visitantes, conversões e comportamento dos usuários</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- UX/UI Section -->
+    <section class="py-20 px-4" id="uxui">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 neon-purple-text">DESIGN INTELIGENTE DE REDES SOCIAIS</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="flex flex-col justify-center">
+                    <h3 class="text-3xl font-bold mb-6 neon-purple-text">Crescimento Acelerado</h3>
+                    <p class="text-gray-300 mb-4">Gerenciamos suas redes sociais com estratégia, criatividade e dados. Aumentamos seu alcance, engajamento e vendas.</p>
+                    <p class="text-gray-300 mb-4">Posts virais, campanhas pagadas, gestão de comunidade e análise de resultados - tudo em um só lugar.</p>
+                    <p class="text-gray-300 mb-8"><strong>Plataformas:</strong> Instagram, TikTok, Facebook, LinkedIn, YouTube e mais.</p>
+                    <button class="w-fit px-8 py-3 bg-gradient-to-r from-neon-purple to-neon-blue text-black font-bold hover:opacity-90 transition text-sm">
+                        Conhecer Estratégia
+                    </button>
+                </div>
+                
+                <div class="glass p-8 rounded-lg border border-neon-purple/30">
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="text-neon-purple mr-4 mt-1 text-xl"><i class="fas fa-rocket"></i></div>
+                            <div>
+                                <h4 class="font-bold mb-1">Conteúdo Viral</h4>
+                                <p class="text-gray-400 text-sm">Posts otimizados para máximo engajamento e alcance orgânico</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="text-neon-purple mr-4 mt-1 text-xl"><i class="fas fa-users"></i></div>
+                            <div>
+                                <h4 class="font-bold mb-1">Gestão de Comunidade</h4>
+                                <p class="text-gray-400 text-sm">Respondemos comentários, mensagens e construímos relacionamento</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="text-neon-purple mr-4 mt-1 text-xl"><i class="fas fa-chart-bar"></i></div>
+                            <div>
+                                <h4 class="font-bold mb-1">Publicidade Paga</h4>
+                                <p class="text-gray-400 text-sm">Campanhas otimizadas para ROI máximo em cada plataforma</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="text-neon-purple mr-4 mt-1 text-xl"><i class="fas fa-eye"></i></div>
+                            <div>
+                                <h4 class="font-bold mb-1">Análise & Relatórios</h4>
+                                <p class="text-gray-400 text-sm">Relatórios detalhados mostrando crescimento e impacto</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Cases Section -->
+    <section class="py-20 px-4" id="projetos">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 neon-text">Conheça nosso trabalho na prática</h2>
+            <p class="text-center text-gray-300 mb-16">Veja como ajudamos marcas a crescer</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Case 1 -->
+                <div class="project-card rounded-lg overflow-hidden hover:shadow-2xl transition duration-300 cursor-pointer group">
+                    <div class="h-40 bg-gradient-to-br from-cyan-400/10 via-blue-500/10 to-purple-600/10 relative flex items-center justify-center group-hover:scale-105 transition duration-300 border-b border-neon-blue/20">
+                        <img src="imagens/WhatsApp Image 2026-03-24 at 09.33.03.jpg" alt="E-Commerce Beauty" class="h-1800 object-contain" style="filter: drop-shadow(0 0 100px rgba(205, 227, 231, 0.3));">
+                    </div>
+                    <div class="p-6 glass">
+                        <div class="text-center mb-4">
+                            <h3 class="text-2xl font-bold tracking-widest text-neon-blue">L&M Automóveis</h3>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 text-neon-blue">WebSite completo</h3>
+                        <p class="text-gray-300 mb-4 text-xs">Estoque online responsivel...</p>
+                        <div class="text-xs text-gray-400 mb-3">
+                            <span class="inline-block bg-neon-blue/20 px-2 py-1 rounded mr-2 mb-2">Website</span>
+                            <span class="inline-block bg-neon-blue/20 px-2 py-1 rounded mr-2 mb-2">Instagram</span>
+                            <span class="inline-block bg-neon-blue/20 px-2 py-1 rounded">Publicidade</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Case 2 -->
+                <div class="project-card rounded-lg overflow-hidden hover:shadow-2xl transition duration-300 cursor-pointer group">
+                    <div class="h-40 bg-gradient-to-br from-purple-500/10 via-pink-500/10 to-purple-700/10 relative flex items-center justify-center group-hover:scale-105 transition duration-300 border-b border-neon-purple/20">
+                        <img src="imagens/logo2.png" alt="Marca de Moda" class="h-24 object-contain" style="filter: drop-shadow(0 0 10px rgba(122, 92, 255, 0.3));">
+                    </div>
+                    <div class="p-6 glass">
+                        <div class="text-center mb-4">
+                            <h3 class="text-2xl font-bold tracking-widest text-neon-purple">Fire House Club</h3>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 text-neon-purple">WebSite Completo</h3>
+                        <p class="text-gray-300 mb-4 text-xs">Descrição....</p>
+                        <div class="text-xs text-gray-400 mb-3">
+                            <span class="inline-block bg-neon-purple/20 px-2 py-1 rounded mr-2 mb-2">WebSite</span>
+                            <span class="inline-block bg-neon-purple/20 px-2 py-1 rounded mr-2 mb-2">Instagram</span>
+                            <span class="inline-block bg-neon-purple/20 px-2 py-1 rounded">Branding</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Case 3 -->
+                <div class="project-card rounded-lg overflow-hidden hover:shadow-2xl transition duration-300 cursor-pointer group">
+                    <div class="h-40 bg-gradient-to-br from-green-400/10 via-cyan-400/10 to-blue-600/10 relative flex items-center justify-center group-hover:scale-105 transition duration-300 border-b border-neon-blue/20">
+                        <img src="imagens/logo3.png" alt="Agência de Serviços" class="h-24 object-contain" style="filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));">
+                    </div>
+                    <div class="p-6 glass">
+                        <div class="text-center mb-4">
+                            <h3 class="text-2xl font-bold tracking-widest text-neon-blue">125K</h3>
+                            <p class="text-xs text-gray-400">Leads em 4 meses</p>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2 text-neon-blue">Agência de Serviços</h3>
+                        <p class="text-gray-300 mb-4 text-xs">Website + Marketing digital geraram pipeline de clientes de alto valor para a agência.</p>
+                        <div class="text-xs text-gray-400 mb-3">
+                            <span class="inline-block bg-neon-blue/20 px-2 py-1 rounded mr-2 mb-2">Website</span>
+                            <span class="inline-block bg-neon-blue/20 px-2 py-1 rounded mr-2 mb-2">LinkedIn</span>
+                            <span class="inline-block bg-neon-blue/20 px-2 py-1 rounded">SEO</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section class="py-20 px-4 bg-gradient-to-b from-transparent via-neon-blue/5 to-transparent" id="sobre">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 neon-text">POR QUE ESCOLHER A PZN?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-3xl font-bold mb-6 neon-purple-text">Resultados que Vendem</h3>
+                    <p class="text-gray-300 mb-4">Não criamos apenas sites bonitos - criamos máquinas de vendas. Cada decisão de design é baseada em dados e experiência em conversão.</p>
+                    <p class="text-gray-300 mb-4">Desde 2018, ajudamos centenas de empresas a crescerem através do digital. Marcas pequenas viraram grandes, influenciadores ficaram ainda maiores.</p>
+                    <p class="text-gray-300 mb-8">Você pode falar com qualquer um dos nossos clientes. Eles vão confirmar: investir em PZN é investir em crescimento real.</p>
+                    
+                    
+                    <button class="px-8 py-3 border-2 border-neon-blue text-neon-blue font-bold hover:bg-neon-blue hover:text-black transition text-sm neon-text">
+                        Conversar com Especialista
+                    </button>
+                </div>
+                
+                <div class="glass p-8 rounded-lg border border-neon-blue/30">
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="text-neon-blue mr-4 text-2xl"><i class="fas fa-crown"></i></div>
+                            <div>
+                                <h4 class="text-lg font-bold mb-2">Equipe Especializada</h4>
+                                <p class="text-gray-400 text-sm">Designers, Desenvolvedores, Estrategistas e Criadores de Conteúdo com anos de experiência</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="text-neon-blue mr-4 text-2xl"><i class="fas fa-rocket"></i></div>
+                            <div>
+                                <h4 class="text-lg font-bold mb-2">Suporte Dedicado</h4>
+                                <p class="text-gray-400 text-sm">SLA de resposta 24h, consultoria contínua e acompanhamento de resultados</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="text-neon-blue mr-4 text-2xl"><i class="fas fa-chart-line"></i></div>
+                            <div>
+                                <h4 class="text-lg font-bold mb-2">Foco em ROI</h4>
+                                <p class="text-gray-400 text-sm">Cada investimento é rastreado. Você vê exatamente quanto cada campanha retorna</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="text-neon-blue mr-4 text-2xl"><i class="fas fa-handshake"></i></div>
+                            <div>
+                                <h4 class="text-lg font-bold mb-2">Parceria de Longo Prazo</h4>
+                                <p class="text-gray-400 text-sm">Você é parceiro, não cliente. Crescemos quando você cresce</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section class="py-20 px-4" id="contato">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 neon-text">PRONTO PARA CRESCER?</h2>
+            <p class="text-center text-gray-300 mb-16 text-lg">Agende uma consultoria gratuita com nossos especialistas</p>
+            
+            <div class="glass p-8 md:p-12 rounded-lg border border-neon-blue/30">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 neon-text">Sua Situação</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="text-neon-blue mr-3 text-xl"><i class="fas fa-check-circle"></i></div>
+                                <p class="text-gray-300">Você tem um negócio que precisa crescer?</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="text-neon-blue mr-3 text-xl"><i class="fas fa-check-circle"></i></div>
+                                <p class="text-gray-300">Quer mais clientes e mais vendas online?</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="text-neon-blue mr-3 text-xl"><i class="fas fa-check-circle"></i></div>
+                                <p class="text-gray-300">Precisa de uma estratégia digital clara?</p>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="text-neon-blue mr-3 text-xl"><i class="fas fa-check-circle"></i></div>
+                                <p class="text-gray-300">Não sabe por onde começar?</p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-gray-400 mt-8 text-sm">Nós ajudamos empresas como a sua a transformar presença online em receita real.</p>
+                    </div>
+                    
+                    <form class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-neon-blue">Seu Nome *</label>
+                            <input type="text" placeholder="Seu nome completo" class="w-full bg-black/50 border border-neon-blue/30 rounded p-3 text-white placeholder-gray-500 focus:border-neon-blue focus:outline-none transition" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-neon-blue">Email *</label>
+                            <input type="email" placeholder="seu@email.com" class="w-full bg-black/50 border border-neon-blue/30 rounded p-3 text-white placeholder-gray-500 focus:border-neon-blue focus:outline-none transition" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-neon-blue">Telefone *</label>
+                            <input type="tel" placeholder="(11) 99999-9999" class="w-full bg-black/50 border border-neon-blue/30 rounded p-3 text-white placeholder-gray-500 focus:border-neon-blue focus:outline-none transition" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-neon-blue">Serviço de Interesse *</label>
+                            <select class="w-full bg-black/50 border border-neon-blue/30 rounded p-3 text-white focus:border-neon-blue focus:outline-none transition" required>
+                                <option value="">Selecione um serviço</option>
+                                <option value="website">Website/E-commerce</option>
+                                <option value="redes">Redes Sociais</option>
+                                <option value="marca">Identidade Visual/Logo</option>
+                                <option value="completo">Pacote Completo</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+                        
+                         <button class="px-8 py-3 border-2 border-neon-blue text-neon-blue font-bold hover:bg-neon-blue hover:text-black transition text-sm neon-text">
+                            Agendar Consultoria Gratuita
+                        </button>
+                        
+                        <p class="text-xs text-gray-400 text-center">A consultoria é 100% grátis. Vamos analisar seu negócio e sugerir a melhor estratégia.</p>
+                    </form>
+                </div>
+                
+                <div class="mt-12 pt-8 border-t border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="text-neon-blue text-3xl mb-3"><i class="fas fa-clock"></i></div>
+                        <p class="font-bold mb-1">Rápido</p>
+                        <p class="text-gray-300 text-sm">Resposta em menos de 24h</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-neon-blue text-3xl mb-3"><i class="fas fa-thumbs-up"></i></div>
+                        <p class="font-bold mb-1">Sem Compromisso</p>
+                        <p class="text-gray-300 text-sm">Nenhuma obrigação de contratar</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-neon-blue text-3xl mb-3"><i class="fas fa-star"></i></div>
+                        <p class="font-bold mb-1">Premium</p>
+                        <p class="text-gray-300 text-sm">Consultoria com nosso melhor especialista</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="glass py-12 px-4 border-t border-gray-700">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h4 class="font-bold text-neon-blue mb-4">PZN DESIGN</h4>
+                    <p class="text-gray-400 text-sm">Transformando ideias em negócios digitais prósperos desde 2018.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-neon-blue mb-4">CONTATO RÁPIDO</h4>
+                    <p class="text-gray-300 text-sm mb-2">📧 dev.panzarini@gmial.com</p>
+                    <p class="text-gray-300 text-sm">📱 +55 (42) 99957-4674</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-neon-blue mb-4">HORÁRIO</h4>
+                    <p class="text-gray-300 text-sm mb-2">Seg-Sex: 9h às 18h</p>
+                    <p class="text-gray-400 text-xs">Agende consultoria fora do horário</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-8 text-center">
+                <p class="text-gray-500 text-xs tracking-widest">
+                    © 2026 PZN DESIGN | SOLUÇÕES DIGITAIS PARA CRESCIMENTO
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Custom Cursor with Trail
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        
+        let lastX = 0;
+        let lastY = 0;
+        let frameCount = 0;
+        
+        const particles = [];
+        
+        class CursorParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.element = document.createElement('div');
+                this.element.className = 'cursor-particle';
+                
+                const size = Math.random() * 4 + 2;
+                this.element.style.width = size + 'px';
+                this.element.style.height = size + 'px';
+                this.element.style.left = x + 'px';
+                this.element.style.top = y + 'px';
+                this.element.style.opacity = 0.8;
+                
+                document.body.appendChild(this.element);
+                
+                this.life = 60;
+                this.speed = Math.random() * 0.5 + 0.2;
+                this.angle = Math.random() * Math.PI * 2;
+            }
+            
+            update() {
+                this.life--;
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+                const opacity = (this.life / 60) * 0.8;
+                
+                this.element.style.opacity = opacity;
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+                this.element.style.boxShadow = `0 0 ${8 * (this.life/60)}px rgba(0, 212, 255, ${opacity})`;
+                
+                if (this.life <= 0) {
+                    this.element.remove();
+                    return false;
+                }
+                return true;
+            }
+        }
+        
+        document.addEventListener('mousemove', (e) => {
+            lastX = e.clientX;
+            lastY = e.clientY;
+            
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            frameCount++;
+            if (frameCount % 3 === 0) {
+                particles.push(new CursorParticle(e.clientX + (Math.random() - 0.5) * 3, e.clientY + (Math.random() - 0.5) * 3));
+            }
+            
+            if (gsap) {
+                gsap.to(cursorFollower, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.8,
+                    ease: "power2.out"
+                });
+            }
+        });
+        
+        function animateParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                if (!particles[i].update()) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+        
+        // Interactive elements
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.6)';
+                cursor.style.boxShadow = '0 0 25px var(--neon-blue), 0 0 50px rgba(0, 212, 255, 1), inset -1px -1px 3px rgba(0, 0, 0, 0.6)';
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%)';
+                cursor.style.boxShadow = '0 0 15px var(--neon-blue), 0 0 30px rgba(0, 212, 255, 0.9), inset -1px -1px 3px rgba(0, 0, 0, 0.6)';
+            });
+        });
+        
+        // Particles.js initialization
+        if (typeof particlesJS !== 'undefined') {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 60,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00D4FF"
+                    },
+                    "shape": {
+                        "type": "circle"
+                    },
+                    "opacity": {
+                        "value": 0.4,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 0.5,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 2,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 200,
+                        "color": "#00D4FF",
+                        "opacity": 0.3,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1.5,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": false,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 200,
+                            "line_linked": {
+                                "opacity": 0.5
+                            }
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        }
+    </script>
+</body>
+</html>
