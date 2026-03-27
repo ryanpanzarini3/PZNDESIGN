@@ -376,6 +376,95 @@
             text-transform: uppercase;
         }
         
+        /* Logo Responsive Size */
+        .logo-large {
+            height: 180px;
+        }
+        
+        @media (min-width: 768px) {
+            .logo-large {
+                height: 480px;
+            }
+        }
+        
+        /* Badge Armor - Around Logo Mobile */
+        .logo-armor-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logo-armor-container img {
+            position: relative;
+            z-index: 10;
+            width: auto;
+        }
+        
+        .badge-armor {
+            position: absolute;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+        
+        /* Top */
+        .badge-top {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Top Right */
+        .badge-top-right {
+            top: 20%;
+            right: 20px;
+        }
+        
+        /* Bottom Right */
+        .badge-bottom-right {
+            bottom: 20%;
+            right: 20px;
+        }
+        
+        /* Bottom Left */
+        .badge-bottom-left {
+            bottom: 20%;
+            left: 20px;
+        }
+        
+        /* Top Left */
+        .badge-top-left {
+            top: 20%;
+            left: 20px;
+        }
+        
+        @media (min-width: 1024px) {
+            .logo-armor-container {
+                position: static;
+                width: auto;
+                height: auto;
+                margin: 0;
+                display: block;
+            }
+            
+            .logo-armor-container img {
+                position: static;
+                transform: none;
+            }
+            
+            .badge-armor {
+                display: none;
+            }
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .logo-container {
@@ -421,7 +510,7 @@
                 <li><a href="#sobre" class="hover:text-neon-blue transition font-semibold text-xs">SOBRE</a></li>
                 <li><a href="#contato" class="hover:text-neon-blue transition font-semibold text-xs">CONTATO</a></li>
             </ul>
-            <button class="border border-neon-blue text-neon-blue px-4 py-2 font-bold text-xs hover:bg-neon-blue hover:text-black transition tracking-widest">
+            <button class="border border-neon-blue text-neon-blue px-1 py-1 md:px-4 md:py-2 font-bold text-xs hover:bg-neon-blue hover:text-black transition tracking-widest">
                 SOLICITAR ORÇAMENTO
             </button>
         </div>
@@ -431,19 +520,45 @@
     <section class="hero relative" id="inicio">
         <!-- Center Content -->
         <div class="hero-content z-20 max-w-2xl px-4 flex flex-col items-center">
-            <!-- Logo Image -->
-            <div class="mb-16 md:mb-20 flex justify-center w-full">
-                <img src="imagens/Design sem nome (1).png" alt="PZN Design" class="logo-image" style="height: 300px; object-fit: contain; mix-blend-mode: lighten; filter: drop-shadow(0 20px 60px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.3)) brightness(1.3) contrast(1.4); will-change: transform; animation: fadeInScale 0.8s ease-out, float 3s ease-in-out infinite;">
+            <!-- Logo Image with Armor Badges -->
+            <div class="logo-armor-container">
+                <img src="imagens/Design sem nome (1).png" alt="PZN Design" class="logo-image logo-large" style="object-fit: contain; mix-blend-mode: lighten; filter: drop-shadow(0 20px 60px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.3)) brightness(1.3) contrast(1.4); will-change: transform; animation: fadeInScale 0.8s ease-out, float 3s ease-in-out infinite;">
+                
+                <!-- Mobile Service Badges Around Logo -->
+                
+                <div class="badge-armor badge-top-right">
+                    <div class="service-badge text-neon-blue" style="width: 40px; height: 40px; border-width: 1.5px;">
+                        <div class="service-badge-text text-xs">WEB</div>
+                    </div>
+                </div>
+                
+                <div class="badge-armor badge-bottom-right">
+                    <div class="service-badge purple text-neon-purple" style="width: 40px; height: 40px; border-width: 1.5px;">
+                        <div class="service-badge-text text-xs">MARCA</div>
+                    </div>
+                </div>
+                
+                <div class="badge-armor badge-bottom-left">
+                    <div class="service-badge text-neon-blue" style="width: 40px; height: 40px; border-width: 1.5px;">
+                        <div class="service-badge-text text-xs">SOCIAL</div>
+                    </div>
+                </div>
+                
+                <div class="badge-armor badge-top-left">
+                    <div class="service-badge text-neon-blue" style="width: 40px; height: 40px; border-width: 1.5px;">
+                        <div class="service-badge-text text-xs">DESIGN</div>
+                    </div>
+                </div>
             </div>
             
-            <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 neon-text tracking-wider leading-tight">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 neon-text tracking-wider leading-tight">
                 TRANSFORME SEU NEGÓCIO DIGITAL
             </h1>
             
-            <p class="text-xs sm:text-sm md:text-base mb-3 opacity-80 uppercase tracking-widest">
+            <p class="text-xs sm:text-xs md:text-sm mb-2 opacity-80 uppercase tracking-widest">
                 SITES, REDES SOCIAIS, MARCAS E MUITO MAIS.
             </p>
-            <p class="text-sm sm:text-base md:text-lg mb-10 tracking-wide">
+            <p class="text-xs sm:text-sm md:text-base mb-6 tracking-wide">
                 SOLUÇÕES DIGITAIS COMPLETAS PARA IMPULSIONAR SEU CRESCIMENTO.
             </p>
             
@@ -472,29 +587,6 @@
             
             <div class="service-badge text-neon-blue">
                 <div class="service-badge-text">DESIGN</div>
-            </div>
-        </div>
-        
-        <!-- Mobile Service Badges -->
-        <div class="absolute bottom-24 md:bottom-32 left-0 right-0 flex lg:hidden justify-center items-center gap-4 pointer-events-auto flex-wrap px-4">
-            <div class="service-badge text-neon-blue" style="width: 70px; height: 70px; border-width: 2px;">
-                <div class="service-badge-text text-xs">UX/UI</div>
-            </div>
-            
-            <div class="service-badge text-neon-blue" style="width: 70px; height: 70px; border-width: 2px;">
-                <div class="service-badge-text text-xs">WEBSITE</div>
-            </div>
-            
-            <div class="service-badge purple text-neon-purple" style="width: 70px; height: 70px; border-width: 2px;">
-                <div class="service-badge-text text-xs">MARCA</div>
-            </div>
-            
-            <div class="service-badge text-neon-blue" style="width: 70px; height: 70px; border-width: 2px;">
-                <div class="service-badge-text text-xs">SOCIAL</div>
-            </div>
-            
-            <div class="service-badge text-neon-blue" style="width: 70px; height: 70px; border-width: 2px;">
-                <div class="service-badge-text text-xs">DESIGN</div>
             </div>
         </div>
     </section>
