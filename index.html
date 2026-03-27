@@ -247,10 +247,10 @@
         
         @keyframes glowPulse {
             0%, 100% {
-                filter: drop-shadow(0 20px 60px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.3)) brightness(1.3) contrast(1.4);
+                opacity: 0.85;
             }
             50% {
-                filter: drop-shadow(0 20px 80px rgba(0, 212, 255, 0.8)) drop-shadow(0 0 60px rgba(0, 212, 255, 0.6)) brightness(1.5) contrast(1.6);
+                opacity: 1;
             }
         }
         
@@ -430,10 +430,10 @@
     <!-- Hero Section -->
     <section class="hero relative" id="inicio">
         <!-- Center Content -->
-        <div class="hero-content z-20 max-w-2xl px-4">
+        <div class="hero-content z-20 max-w-2xl px-4 flex flex-col items-center">
             <!-- Logo Image -->
-            <div class="mb-12 flex justify-center">
-                <img src="imagens/Design sem nome (1).png" alt="PZN Design" class="logo-image" style="height: 380px; object-fit: contain; mix-blend-mode: lighten; animation: fadeInScale 0.8s ease-out, float 3s ease-in-out infinite, glowPulse 3s ease-in-out infinite;">
+            <div class="mb-16 md:mb-20 flex justify-center w-full">
+                <img src="imagens/Design sem nome (1).png" alt="PZN Design" class="logo-image" style="height: 300px; object-fit: contain; mix-blend-mode: lighten; filter: drop-shadow(0 20px 60px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 40px rgba(0, 212, 255, 0.3)) brightness(1.3) contrast(1.4); will-change: transform; animation: fadeInScale 0.8s ease-out, float 3s ease-in-out infinite;">
             </div>
             
             <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 neon-text tracking-wider leading-tight">
@@ -472,6 +472,29 @@
             
             <div class="service-badge text-neon-blue">
                 <div class="service-badge-text">DESIGN</div>
+            </div>
+        </div>
+        
+        <!-- Mobile Service Badges -->
+        <div class="absolute bottom-24 md:bottom-32 left-0 right-0 flex lg:hidden justify-center items-center gap-4 pointer-events-auto flex-wrap px-4">
+            <div class="service-badge text-neon-blue" style="width: 70px; height: 70px; border-width: 2px;">
+                <div class="service-badge-text text-xs">UX/UI</div>
+            </div>
+            
+            <div class="service-badge text-neon-blue" style="width: 70px; height: 70px; border-width: 2px;">
+                <div class="service-badge-text text-xs">WEBSITE</div>
+            </div>
+            
+            <div class="service-badge purple text-neon-purple" style="width: 70px; height: 70px; border-width: 2px;">
+                <div class="service-badge-text text-xs">MARCA</div>
+            </div>
+            
+            <div class="service-badge text-neon-blue" style="width: 70px; height: 70px; border-width: 2px;">
+                <div class="service-badge-text text-xs">SOCIAL</div>
+            </div>
+            
+            <div class="service-badge text-neon-blue" style="width: 70px; height: 70px; border-width: 2px;">
+                <div class="service-badge-text text-xs">DESIGN</div>
             </div>
         </div>
     </section>
