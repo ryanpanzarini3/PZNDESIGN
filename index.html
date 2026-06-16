@@ -1100,111 +1100,156 @@
     #calculator { background: var(--bg-secondary); }
 
     .calc-wrap {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 3rem;
-      max-width: 900px;
+      background: rgba(5, 18, 35, 0.96);
+      border: 1px solid rgba(0, 229, 255, 0.16);
+      border-radius: 32px;
+      padding: 3.5rem 3rem;
+      max-width: 920px;
       margin: 0 auto;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+      position: relative;
+      overflow: hidden;
     }
+    .calc-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(0, 229, 255, 0.12), transparent 34%),
+                  radial-gradient(circle at bottom left, rgba(56, 111, 255, 0.08), transparent 26%);
+      pointer-events: none;
+    }
+    .calc-wrap > * { position: relative; z-index: 1; }
 
     .calc-lead {
       text-align: center;
-      margin-bottom: 2.2rem;
-      font-size: 0.93rem;
+      margin-bottom: 2.4rem;
+      font-size: 0.97rem;
       color: var(--text-secondary);
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.8;
     }
 
     .calc-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 0.9rem;
-      margin-bottom: 2.2rem;
+      grid-template-columns: repeat(2, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.4rem;
     }
 
     .calc-opt {
       display: flex;
       align-items: flex-start;
-      gap: 0.7rem;
-      padding: 1rem 1.15rem;
-      background: var(--bg-secondary);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
+      gap: 0.9rem;
+      padding: 1.2rem 1.25rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
       cursor: pointer;
-      transition: all 0.28s ease;
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
       user-select: none;
+      min-height: 118px;
     }
-    .calc-opt:hover { border-color: var(--border-accent); }
+    .calc-opt:hover {
+      border-color: rgba(0, 229, 255, 0.28);
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+    }
     .calc-opt.selected {
-      border-color: var(--accent-cyan);
-      background: var(--accent-cyan-dim);
+      border-color: rgba(0, 229, 255, 0.95);
+      background: rgba(0, 229, 255, 0.12);
     }
     .calc-opt input { display: none; }
 
     .check-box {
-      width: 20px; height: 20px;
-      border: 1.5px solid var(--text-muted);
-      border-radius: 5px;
+      width: 22px; height: 22px;
+      border: 1.5px solid rgba(255, 255, 255, 0.22);
+      border-radius: 9px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 1px;
+      margin-top: 0.4rem;
       transition: all 0.22s ease;
+      background: rgba(255, 255, 255, 0.03);
     }
     .calc-opt.selected .check-box {
-      background: var(--accent-cyan);
-      border-color: var(--accent-cyan);
+      background: rgba(0, 229, 255, 0.95);
+      border-color: rgba(0, 229, 255, 0.95);
     }
     .check-box::after {
       content: '✓';
-      font-size: 0.68rem;
+      font-size: 0.85rem;
       color: #fff;
       opacity: 0;
-      transition: opacity 0.18s;
+      transition: opacity 0.18s ease;
     }
     .calc-opt.selected .check-box::after { opacity: 1; }
 
     .opt-info {}
-    .opt-name  { font-size: 0.88rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.12rem; }
+    .opt-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.18rem;
+    }
     .opt-price {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
+      font-size: 0.78rem;
       color: var(--accent-cyan);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .opt-desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
     }
 
     .calc-result {
       text-align: center;
-      padding: 1.8rem 2rem;
-      background: var(--bg-secondary);
-      border-radius: 14px;
-      border: 1px solid var(--border);
+      padding: 2rem 2rem 2.4rem;
+      background: rgba(3, 11, 24, 0.92);
+      border-radius: 24px;
+      border: 1px solid rgba(0, 229, 255, 0.16);
       margin-bottom: 1.8rem;
     }
     .result-label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
+      font-size: 0.78rem;
       color: var(--text-secondary);
       text-transform: uppercase;
-      letter-spacing: 0.14em;
-      margin-bottom: 0.4rem;
+      letter-spacing: 0.18em;
+      margin-bottom: 0.45rem;
     }
     .result-val {
-      font-size: clamp(2.2rem, 5vw, 3rem);
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
       font-weight: 700;
       background: var(--grad-accent);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.04em;
     }
     .result-note {
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
-      margin-top: 0.45rem;
+      margin-top: 0.85rem;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.8;
     }
 
-    .calc-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .calc-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
 
     /* ============================================================
        FOOTER
@@ -1342,8 +1387,8 @@
       .services-grid { grid-template-columns: 1fr; }
       .process-timeline { grid-template-columns: 1fr; gap: 2rem; }
 
-      .calc-wrap { padding: 1.6rem; }
-      .calc-grid { grid-template-columns: repeat(2, 1fr); }
+      .calc-wrap { padding: 1.4rem; }
+      .calc-grid { grid-template-columns: 1fr; }
 
       .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
       .footer-bottom { flex-direction: column; text-align: center; }
@@ -1351,6 +1396,7 @@
 
     @media (max-width: 480px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .calc-wrap { padding: 1.1rem; }
       .calc-grid { grid-template-columns: 1fr; }
       .hero-cta { flex-direction: column; }
       .hero-cta .btn { width: 100%; justify-content: center; }
@@ -1717,7 +1763,7 @@
             </svg>
           </div>
           <h3 class="svc-title">Sistemas sob Medida</h3>
-          <p class="svc-desc">Banco de dados, painéis administrativos, integrações com APIs e automações. Do briefing ao deploy, exatamente o que o seu negócio precisa.</p>
+          <p class="svc-desc">Comandas, contas, relatórios, estoque e cardápio integrados em sistemas fáceis de usar para bares, restaurantes e lojas.</p>
         </div>
         <div class="svc-card reveal reveal-d2">
           <div class="svc-icon-wrap gi">
@@ -1725,8 +1771,8 @@
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
             </svg>
           </div>
-          <h3 class="svc-title">Velocidade &amp; SEO</h3>
-          <p class="svc-desc">Sites que carregam em menos de 2 segundos com pontuação máxima no Google Lighthouse. Código limpo que o Google adora — e o usuário nem percebe, só fica.</p>
+          <h3 class="svc-title">Lojas de Veículos</h3>
+          <p class="svc-desc">Sites de venda de carros com catálogo online, painel de anúncios e gestão de estoque. Atualizamos veículos por R$ 500/mês.</p>
         </div>
         <div class="svc-card reveal reveal-d3">
           <div class="svc-icon-wrap yi">
@@ -1734,8 +1780,8 @@
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             </svg>
           </div>
-          <h3 class="svc-title">Suporte Contínuo</h3>
-          <p class="svc-desc">Não sumimos após a entrega. Monitoramento, atualizações de segurança e ajustes de conteúdo para o seu negócio nunca parar.</p>
+          <h3 class="svc-title">Vídeo, Foto &amp; Design</h3>
+          <p class="svc-desc">Produção de vídeo, fotografia e design visual para destacar produtos, ofertas e anúncios com qualidade profissional.</p>
         </div>
       </div>
     </div>
@@ -1793,75 +1839,83 @@
 
         <div class="calc-grid" id="calcOptions" role="group" aria-label="Opções do projeto">
 
-          <label class="calc-opt" data-price="1500">
-            <input type="checkbox" value="1500" data-name="Site Institucional" />
+          <label class="calc-opt" data-price="2500">
+            <input type="checkbox" value="2500" data-name="Sistema de Gestão Completo" />
+            <div class="check-box" aria-hidden="true"></div>
+            <div class="opt-info">
+              <div class="opt-name">Sistema de Gestão Completo</div>
+              <div class="opt-price">a partir de R$ 2.500</div>
+              <div class="opt-desc">Controle estoque, vendas, clientes, caixa e relatórios em uma plataforma desenvolvida sob medida.</div>
+            </div>
+          </label>
+
+          <label class="calc-opt" data-price="2500">
+            <input type="checkbox" value="2500" data-name="Site Institucional" />
             <div class="check-box" aria-hidden="true"></div>
             <div class="opt-info">
               <div class="opt-name">Site Institucional</div>
-              <div class="opt-price">a partir de R$ 1.500</div>
+              <div class="opt-price">a partir de R$ 2.500</div>
+              <div class="opt-desc">Apresente sua empresa na internet com um site profissional, responsivo e otimizado para gerar credibilidade.</div>
+            </div>
+          </label>
+
+          <label class="calc-opt" data-price="500">
+            <input type="checkbox" value="500" data-name="Plano de Suporte e Hospedagem" />
+            <div class="check-box" aria-hidden="true"></div>
+            <div class="opt-info">
+              <div class="opt-name">Plano de Suporte e Hospedagem</div>
+              <div class="opt-price">a partir de R$ 500/mês</div>
+              <div class="opt-desc">Atualizações, backups, suporte técnico e manutenção contínua para seu site ou sistema.</div>
             </div>
           </label>
 
           <label class="calc-opt" data-price="800">
-            <input type="checkbox" value="800" data-name="Landing Page" />
+            <input type="checkbox" value="800" data-name="Gestão de Redes Sociais" />
             <div class="check-box" aria-hidden="true"></div>
             <div class="opt-info">
-              <div class="opt-name">Landing Page</div>
+              <div class="opt-name">Gestão de Redes Sociais</div>
+              <div class="opt-price">a partir de R$ 800/mês</div>
+              <div class="opt-desc">Criação de artes, planejamento de conteúdo e acompanhamento para suas redes sociais.</div>
+            </div>
+          </label>
+
+          <label class="calc-opt" data-price="300">
+            <input type="checkbox" value="300" data-name="Produção de Vídeos" />
+            <div class="check-box" aria-hidden="true"></div>
+            <div class="opt-info">
+              <div class="opt-name">Produção de Vídeos</div>
+              <div class="opt-price">a partir de R$ 300</div>
+              <div class="opt-desc">Vídeos promocionais, institucionais e conteúdos para redes sociais que destacam sua marca.</div>
+            </div>
+          </label>
+
+          <label class="calc-opt" data-price="250">
+            <input type="checkbox" value="250" data-name="Fotografia Comercial" />
+            <div class="check-box" aria-hidden="true"></div>
+            <div class="opt-info">
+              <div class="opt-name">Fotografia Comercial</div>
+              <div class="opt-price">a partir de R$ 250</div>
+              <div class="opt-desc">Fotos profissionais de produtos, ambientes e serviços para fortalecer sua presença digital.</div>
+            </div>
+          </label>
+
+          <label class="calc-opt" data-price="150">
+            <input type="checkbox" value="150" data-name="Design Gráfico" />
+            <div class="check-box" aria-hidden="true"></div>
+            <div class="opt-info">
+              <div class="opt-name">Design Gráfico</div>
+              <div class="opt-price">a partir de R$ 150</div>
+              <div class="opt-desc">Criação de artes para redes sociais, flyers, cardápios, cartões de visita e materiais promocionais.</div>
+            </div>
+          </label>
+
+          <label class="calc-opt" data-price="800">
+            <input type="checkbox" value="800" data-name="Identidade Visual" />
+            <div class="check-box" aria-hidden="true"></div>
+            <div class="opt-info">
+              <div class="opt-name">Identidade Visual</div>
               <div class="opt-price">a partir de R$ 800</div>
-            </div>
-          </label>
-
-          <label class="calc-opt" data-price="3500">
-            <input type="checkbox" value="3500" data-name="E-commerce" />
-            <div class="check-box" aria-hidden="true"></div>
-            <div class="opt-info">
-              <div class="opt-name">E-commerce</div>
-              <div class="opt-price">a partir de R$ 3.500</div>
-            </div>
-          </label>
-
-          <label class="calc-opt" data-price="600">
-            <input type="checkbox" value="600" data-name="Blog Integrado" />
-            <div class="check-box" aria-hidden="true"></div>
-            <div class="opt-info">
-              <div class="opt-name">Blog Integrado</div>
-              <div class="opt-price">a partir de R$ 600</div>
-            </div>
-          </label>
-
-          <label class="calc-opt" data-price="400">
-            <input type="checkbox" value="400" data-name="Integração WhatsApp" />
-            <div class="check-box" aria-hidden="true"></div>
-            <div class="opt-info">
-              <div class="opt-name">Integração WhatsApp</div>
-              <div class="opt-price">a partir de R$ 400</div>
-            </div>
-          </label>
-
-          <label class="calc-opt" data-price="1200">
-            <input type="checkbox" value="1200" data-name="Área de Membros" />
-            <div class="check-box" aria-hidden="true"></div>
-            <div class="opt-info">
-              <div class="opt-name">Área de Membros</div>
-              <div class="opt-price">a partir de R$ 1.200</div>
-            </div>
-          </label>
-
-          <label class="calc-opt" data-price="1800">
-            <input type="checkbox" value="1800" data-name="Painel Administrativo" />
-            <div class="check-box" aria-hidden="true"></div>
-            <div class="opt-info">
-              <div class="opt-name">Painel Administrativo</div>
-              <div class="opt-price">a partir de R$ 1.800</div>
-            </div>
-          </label>
-
-          <label class="calc-opt" data-price="700">
-            <input type="checkbox" value="700" data-name="SEO Avançado" />
-            <div class="check-box" aria-hidden="true"></div>
-            <div class="opt-info">
-              <div class="opt-name">SEO Avançado</div>
-              <div class="opt-price">a partir de R$ 700</div>
+              <div class="opt-desc">Desenvolvimento de logotipo, paleta de cores e elementos visuais que representam sua marca.</div>
             </div>
           </label>
 
@@ -1874,7 +1928,7 @@
         </div>
 
         <div class="calc-actions">
-          <a href="#" class="btn btn-whatsapp" id="calcWA">
+          <a href="javascript:void(0)" class="btn btn-whatsapp" id="calcWA">
             💬 Enviar Seleção pelo WhatsApp
           </a>
         </div>
@@ -2210,10 +2264,11 @@
       }
 
       opts.forEach(opt => {
-        opt.addEventListener('click', () => {
-          opt.classList.toggle('selected');
+        opt.addEventListener('click', e => {
+          e.preventDefault();
           const inp = opt.querySelector('input');
-          inp.checked = !inp.checked;
+          const selected = opt.classList.toggle('selected');
+          inp.checked = selected;
           update();
         });
       });
